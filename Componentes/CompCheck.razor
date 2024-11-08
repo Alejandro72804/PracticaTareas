@@ -1,0 +1,26 @@
+﻿<input type="checkbox" checked="@(Nota.Activa)" @onchange="() => Check()" />
+@switch (Nota.Activa)
+{
+    case true:
+        <span> Completado</span>
+        ; break;
+    case false:
+        <span> Pendiente</span>
+        ; break;
+}
+
+@code {
+    [Parameter]
+    public Nota? Nota { get; set; }
+
+    [Parameter]
+    public EventCallback<Nota> OnCheck { get; set; }
+
+    private async Task Check()
+    {
+        Nota.Activa = !Nota.Activa;
+        await Task.Delay(100);
+        await OnCheck.InvokeAsync(Nota);
+    }
+
+}

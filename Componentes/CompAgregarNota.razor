@@ -1,0 +1,28 @@
+﻿<span> Titulo de Nota </span>
+<input @bind="texto" />
+<span> Descripcion de Nota </span>
+<input @bind="descr" />
+<button class="btn btn-primary" @onclick=" () =>Agrega()"> Agregar Nota</button>
+
+@code {
+    [Parameter]
+    public Nota? Nota { get; set; }
+
+    [Parameter]
+    public string texto { get; set; } = "";
+
+    [Parameter]
+    public string descr { get; set; } = "";
+
+    [Parameter]
+    public EventCallback<Nota> OnAgrega { get; set;}
+
+    private async Task Agrega()
+    {
+        Nota.Nombre = texto;
+        Nota.Descripcion = descr;
+        await OnAgrega.InvokeAsync(Nota);
+        texto = "";
+        descr = "";
+    }
+}

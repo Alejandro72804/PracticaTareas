@@ -1,0 +1,67 @@
+﻿@inject ServAlmacen ServAlmacen
+@inject ServTareas ServTareas
+@page "/"
+
+<PageTitle> Lista de Tareas </PageTitle>
+
+<h1>Lista de Tareas</h1>
+<!-- <h3>Tareas por Hacer: ( @ServTareas.LstNotas().Count(Nota => !Nota.Activa) )</h3>  Sin Guardar   -->
+<br>
+<div class="Agrega">
+    <CompAgregarNota Nota="@ServAlmacen.NuevaNota()" OnAgrega="ServAlmacen.GuardaAlmNota" />
+</div>
+<br>
+<div class="pendientes">
+    <section class="Lista">
+        @if ((ServAlmacen.LstNotas.Where(n => !n.Archiva)).Any(nt => !nt.Activa))
+        {
+            <h3>Tareas por Hacer: ( @ServAlmacen.LstNotas.Where(nt => !nt.Archiva).Count(nt => !nt.Activa) )</h3>
+
+            <ul>
+       
+                @foreach (var nota in (ServAlmacen.LstNotas.Where(nt => !nt.Archiva)).Where(nt => !nt.Activa))
+                {
+                    <li style="background-image: url('@nota.img');background-size: cover;
+                                background-repeat: no-repeat; background-position: center;">
+                        <br>
+                        <CompCheck Nota="nota" OnCheck="ServAlmacen.CheckNota" />
+                        <br>
+                        <CompListarNotas Nota="nota" OnArchivar="ServAlmacen.ArchivaNota" OnEliminar="ServAlmacen.EliminaAlmNota" OnEdita="ServAlmacen.GuardaAlmNota" />
+                        <br>
+                    </li>
+                }
+            </ul>
+        }
+    </section>
+</div>
+<div class="completas">
+    <section class="Lista">
+        @if ((ServAlmacen.LstNotas.Where(n => !n.Archiva)).Any(nt => nt.Activa))
+        {
+            <h3>Tareas Completas: ( @ServAlmacen.LstNotas.Where(nt => !nt.Archiva).Count(nt => nt.Activa) )</h3>
+            <ul>
+                   @foreach (var nota in (ServAlmacen.LstNotas.Where(nt => !nt.Archiva)).Where(nt => nt.Activa))
+                {
+                    <li style="background-image: url('@nota.img');background-size: cover;
+                                background-repeat: no-repeat; background-position: center;">
+                        <br>
+                        <CompCheck Nota="nota" OnCheck="ServAlmacen.CheckNota" />
+                        <br>
+                        <CompListarNotas Nota="nota" OnArchivar="ServAlmacen.ArchivaNota" OnEliminar="ServAlmacen.EliminaAlmNota" 
+                        OnEdita="ServAlmacen.GuardaAlmNota" />
+                        <br>
+                    </li>
+                }
+            </ul>
+        }
+    </section>
+</div>
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await ServAlmacen.DesplegarNotas();
+    }
+ 
+}

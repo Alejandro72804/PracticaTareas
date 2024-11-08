@@ -1,0 +1,35 @@
+﻿<input @bind="Nota.Nombre" placeholder="Titulo" />
+<br>
+<textarea class="textArea" @bind="Nota.Descripcion" placeholder="Descripción" rows="4"></textarea>
+<br>
+<div id="btnOrdena">
+    <button class="btn btn-info" @onclick="() => OnEdita.InvokeAsync(Nota)">
+        &#10003;
+    </button>
+    <button class="btn btn-success" @onclick="() => OnArchivar.InvokeAsync(Nota)">
+        @if (Nota.Archiva)
+        {
+            <span>Desarchivar</span>
+        }
+        else
+        {
+            <span>Archivar</span>
+        }
+    </button>
+    <button class="btn btn-danger" @onclick="() => OnEliminar.InvokeAsync(Nota.Id.ToString())">Eliminar</button>
+
+</div>
+@code {
+    [Parameter]
+    public Nota? Nota { get; set; }
+
+    [Parameter]
+    public EventCallback<Nota> OnArchivar { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnEliminar { get; set; }
+
+    [Parameter]
+    public EventCallback<Nota> OnEdita { get; set; }
+
+}

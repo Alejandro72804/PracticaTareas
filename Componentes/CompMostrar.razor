@@ -1,0 +1,28 @@
+﻿@inject ServAlmacen ServAlmacen
+<li style="background-image: url('@Nota.img');background-size: cover;
+                         background-repeat: no-repeat; background-position: center;">
+    <br>
+    <CompCheck Nota="Nota" OnCheck="Check" />
+    <br>
+    <CompListarNotas Nota="Nota" OnArchivar="ServAlmacen.ArchivaNota" OnEliminar="ServAlmacen.EliminaAlmNota" OnEdita="ServAlmacen.GuardaAlmNota" />
+    <br>
+</li>
+
+@code {
+    [Parameter]
+    public Nota Nota { get; set; }
+
+    public EventCallback Actualiza { get; set; }
+
+    public async Task Check()
+    {
+        await ServAlmacen.CheckNota(Nota);
+        StateHasChanged();
+
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await ServAlmacen.DesplegarNotas();
+    }
+
+}
